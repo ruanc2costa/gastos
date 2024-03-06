@@ -17,7 +17,6 @@ public class Despesa {
     private String descricao;
     @NotNull
     private BigDecimal valor;
-    @NotNull
     private String data;
     private String categoria;
 
@@ -101,18 +100,4 @@ public class Despesa {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
-    @Override
-    public String toString() {
-        return "Despesa{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", valor=" + valor +
-                ", data='" + data + '\'' +
-                ", categoria='" + categoria + '\'' +
-                '}';
-    }
-
-
 }

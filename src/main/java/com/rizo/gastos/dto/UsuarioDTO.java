@@ -17,7 +17,7 @@ public class UsuarioDTO {
     private int idade;
     private List<CartaoDTO> cartoesDTO;
 
-    private List<Despesa> despesas;
+    private List<DespesaDTO> despesas;
 
 
     public UsuarioDTO() {
@@ -74,12 +74,16 @@ public class UsuarioDTO {
     public List<DespesaDTO> getDespesasDTO() {
         return despesas != null ? despesas.stream()
                 .map(despesa -> new DespesaDTO(despesa.getId(), despesa.getNome(), despesa.getDescricao(), despesa.getValor(),
-                        despesa.getData().toString(), despesa.getCategoria()))
+                        despesa.getData() == null ? "Valor padrão ou tratamento para null" : despesa.getData(), despesa.getCategoria()))
                 .collect(Collectors.toList()) : null;
     }
 
     public void setCartoesDTO(List<CartaoDTO> cartoesDTO) {
         this.cartoesDTO = cartoesDTO;
+    }
+
+    public void setDespesas(List<DespesaDTO> despesas) {
+        this.despesas = despesas;
     }
 
 }

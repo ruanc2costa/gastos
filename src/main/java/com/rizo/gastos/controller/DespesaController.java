@@ -2,7 +2,6 @@ package com.rizo.gastos.controller;
 
 import com.rizo.gastos.dto.DespesaDTO;
 import com.rizo.gastos.service.DespesaService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,7 @@ public class DespesaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DespesaDTO> findById(Long id){
+    public ResponseEntity<DespesaDTO> findById(@PathVariable  Long id){
         return ResponseEntity.ok(despesaService.findById(id));
     }
 
@@ -38,6 +37,7 @@ public class DespesaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
+        despesaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

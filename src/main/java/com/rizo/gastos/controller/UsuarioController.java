@@ -22,7 +22,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Long id){
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(usuarioService.findById(id));
     }
 

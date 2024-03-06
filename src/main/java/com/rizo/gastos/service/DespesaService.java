@@ -6,6 +6,7 @@ import com.rizo.gastos.model.Usuario;
 import com.rizo.gastos.repository.DespesaRepository;
 import com.rizo.gastos.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,22 +25,15 @@ public class DespesaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public DespesaDTO create(Long usuarioId, DespesaDTO despesaDTO) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado para o ID: " + usuarioId));
-
-        Despesa despesa = new Despesa();
-        despesa.setNome(despesaDTO.getNome());
-        despesa.setDescricao(despesaDTO.getDescricao());
-        despesa.setValor(despesaDTO.getValor());
-        despesa.setData(despesaDTO.getData()); // Ajuste conforme o formato da sua data
-        despesa.setCategoria(despesaDTO.getCategoria());
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        Despesa despesa = modelMapper.map(despesaDTO, Despesa.class);
         despesa.setUsuario(usuario);
-
-        despesa = despesaRepository.save(despesa);
-
-        return new DespesaDTO(despesa.getId(), despesa.getNome(), despesa.getDescricao(),
-                despesa.getValor(), despesa.getData().toString(), despesa.getCategoria());
+        despesaRepository.save(despesa);
+        return modelMapper.map(despesa, DespesaDTO.class);
     }
 
     public DespesaDTO findById(Long id){
