@@ -4,8 +4,10 @@ import com.rizo.gastos.dto.CartaoDTO;
 import com.rizo.gastos.model.Cartao;
 import com.rizo.gastos.model.Usuario;
 import com.rizo.gastos.repository.CartaoRepository;
+import com.rizo.gastos.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +20,26 @@ public class CartaoService {
     private CartaoRepository cartaoRepository;
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioRepository usuarioRepository;
 
-    public CartaoDTO create(Long clienteId, CartaoDTO cartaoDTO){
-        Usuario usuario = usuarioService.findByIdDespesa(clienteId);
-        Cartao cartao = new Cartao(cartaoDTO);
-        usuario.getCartoes().add(cartao);
-        cartaoRepository.save(cartao);
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public CartaoDTO create(Long usuarioId, CartaoDTO cartaoDTO){
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        Cartao cartao = modelMapper.map(cartaoDTO, Cartao.class);
         cartao.setUsuario(usuario);
-        return new CartaoDTO(cartaoRepository.save(cartao));
+        cartaoRepository.save(cartao);
+        return modelMapper.map(cartao, CartaoDTO.class);
     }
 
     public CartaoDTO findById(Long id){
-        return new CartaoDTO(cartaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cartão não encontrado")));
+       Cartao cartao = cartaoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cartão não encontrado"));
+         return modelMapper.map(cartao, CartaoDTO.class);
     }
 
     public Page<CartaoDTO> list(Pageable pageable){
-        return cartaoRepository.findAll(pageable).map(CartaoDTO::new);
+        return cartaoRepository.findAll(pageable).map(cartao -> modelMapper.map(cartao, CartaoDTO.class));
     }
 
     public CartaoDTO update(Long id, CartaoDTO cartaoDTO){
@@ -42,7 +47,7 @@ public class CartaoService {
         cartao.setNome(cartaoDTO.getNome());
         cartao.setBanco(cartaoDTO.getBanco());
         cartao.setLimite(cartaoDTO.getLimite());
-        return new CartaoDTO(cartaoRepository.save(cartao));
+        return modelMapper.map(cartaoRepository.save(cartao), CartaoDTO.class);
     }
 
     public void delete(Long id){

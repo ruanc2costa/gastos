@@ -5,6 +5,7 @@ import com.rizo.gastos.model.Despesa;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CartaoDTO {
     private Long id;
@@ -12,7 +13,7 @@ public class CartaoDTO {
     private String banco;
     private BigDecimal limite;
 
-    private List<DespesaDTO> despesasDTO;
+    private List<DespesaDTO> despesas;
     public CartaoDTO() {
     }
 
@@ -55,5 +56,15 @@ public class CartaoDTO {
         this.id = id;
     }
 
+    public List<DespesaDTO> getDespesasDTO() {
+        return despesas != null ? despesas.stream()
+                .map(despesa -> new DespesaDTO(despesa.getId(), despesa.getNome(), despesa.getDescricao(), despesa.getValor(),
+                        despesa.getData() == null ? "Valor padrão ou tratamento para null" : despesa.getData(), despesa.getCategoria()))
+                .collect(Collectors.toList()) : null;
+    }
+
+    public void setDespesas(List<DespesaDTO> despesas) {
+        this.despesas = despesas;
+    }
 
 }
