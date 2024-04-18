@@ -1,4 +1,4 @@
-package com.rizo.gastos.configuration;
+package com.rizo.gastos.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -12,3 +12,4 @@ public class ModelMapperConfiguration {
         return new ModelMapper();
     }
 }
+

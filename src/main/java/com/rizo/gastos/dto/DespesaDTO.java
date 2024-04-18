@@ -40,6 +40,9 @@ public class DespesaDTO {
         this.categoria = categoria;
     }
 
+    public DespesaDTO(Object o) {
+    }
+
     public Long getId() {
         return id;
     }

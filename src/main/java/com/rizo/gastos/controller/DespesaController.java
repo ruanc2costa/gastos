@@ -1,12 +1,18 @@
 package com.rizo.gastos.controller;
 
 import com.rizo.gastos.dto.DespesaDTO;
+import com.rizo.gastos.model.Usuario;
+import com.rizo.gastos.repository.UsuarioRepository;
 import com.rizo.gastos.service.DespesaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/despesas")
@@ -15,10 +21,8 @@ public class DespesaController {
     @Autowired
     private DespesaService despesaService;
 
-    @GetMapping
-    public ResponseEntity<Page<DespesaDTO>> list(Pageable pageable){
-        return ResponseEntity.ok(despesaService.list(pageable));
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<DespesaDTO> findById(@PathVariable  Long id){
@@ -39,5 +43,12 @@ public class DespesaController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         despesaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping ResponseEntity<List<DespesaDTO>> listByUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String UserId = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(UserId).get(0);
+        return ResponseEntity.ok(despesaService.listByUser(usuario.getId()));
     }
 }

@@ -19,6 +19,8 @@ public class UsuarioDTO {
 
     private List<DespesaDTO> despesas;
 
+    private String role;
+
 
     public UsuarioDTO() {
     }
@@ -84,6 +86,14 @@ public class UsuarioDTO {
 
     public void setDespesas(List<DespesaDTO> despesas) {
         this.despesas = despesas;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

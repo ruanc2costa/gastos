@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-@Entity(name = "usuario")
+@Entity
 public class Usuario {
 
     @Id
@@ -28,15 +28,18 @@ public class Usuario {
     @JoinColumn(name = "despesa_id")
     private List<Despesa> despesas;
 
+    private String role;
+
     public Usuario() {
     }
 
-    public Usuario(Long id, String nome, String email, String senha, int idade) {
+    public Usuario(Long id, String nome, String email, String senha, int idade, String role) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.idade = idade;
+        this.role = role;
     }
 
     public Usuario(UsuarioDTO usuarioDTO) {
@@ -45,6 +48,7 @@ public class Usuario {
         this.email = usuarioDTO.getEmail();
         this.senha = usuarioDTO.getSenha();
         this.idade = usuarioDTO.getIdade();
+        this.role = usuarioDTO.getRole();
     }
 
     public Long getId() {
@@ -72,12 +76,15 @@ public class Usuario {
     }
 
     public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public List<Cartao> getCartoes() {
@@ -94,5 +101,13 @@ public class Usuario {
 
     public void setDespesas(List<Despesa> despesas) {
         this.despesas = despesas;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -10,11 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DespesaService {
@@ -56,5 +55,11 @@ public class DespesaService {
 
     public void delete(Long id){
         despesaRepository.deleteById(id);
+    }
+
+    public List<DespesaDTO> listByUser(Long usuarioId){
+        return despesaRepository.findByUsuarioId(usuarioId).stream()
+                .map(despesa -> modelMapper.map(despesa, DespesaDTO.class))
+                .collect(Collectors.toList());
     }
 }
