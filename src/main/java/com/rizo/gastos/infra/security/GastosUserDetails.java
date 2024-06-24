@@ -1,4 +1,4 @@
-package com.rizo.gastos.config;
+package com.rizo.gastos.infra.security;
 
 import com.rizo.gastos.model.Usuario;
 import com.rizo.gastos.repository.UsuarioRepository;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GastosUserDetails implements UserDetailsService {

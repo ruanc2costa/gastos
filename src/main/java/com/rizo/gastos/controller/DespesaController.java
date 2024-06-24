@@ -29,8 +29,11 @@ public class DespesaController {
         return ResponseEntity.ok(despesaService.findById(id));
     }
 
-    @PostMapping("/{clienteId}")
-    public ResponseEntity<DespesaDTO> create(@PathVariable  Long clienteId, @RequestBody DespesaDTO despesaDTO){
+    @PostMapping
+    public ResponseEntity<DespesaDTO> create(@RequestBody DespesaDTO despesaDTO, Authentication authentication ){
+        String userId = authentication.getName();
+        List<Usuario> usuario = usuarioRepository.findByEmail(userId);
+        Long clienteId = usuario.get(0).getId();
         return ResponseEntity.ok(despesaService.create(clienteId, despesaDTO));
     }
 
@@ -45,10 +48,9 @@ public class DespesaController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping ResponseEntity<List<DespesaDTO>> listByUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String UserId = authentication.getName();
-        Usuario usuario = usuarioRepository.findByEmail(UserId).get(0);
+    @GetMapping ResponseEntity<List<DespesaDTO>> listByUser(Authentication authentication){
+        String userId = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(userId).get(0);
         return ResponseEntity.ok(despesaService.listByUser(usuario.getId()));
     }
 }
