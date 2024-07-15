@@ -24,7 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("gastos-api")
                     .withSubject(usuario.getEmail())
-                    .withExpiresAt(this.getExpirationTime())
+                    .withExpiresAt(getExpirationTime())
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException("Error while authenticating: " + e.getMessage());
@@ -45,6 +45,7 @@ public class TokenService {
     }
 
     private Instant getExpirationTime() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        // Aumentar o tempo de expiração para, por exemplo, 24 horas
+        return LocalDateTime.now().plusHours(24).toInstant(ZoneOffset.of("-03:00"));
     }
 }
